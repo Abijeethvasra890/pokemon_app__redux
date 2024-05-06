@@ -1,0 +1,16 @@
+.graph-container {
+    display: flex;
+    justify-content: center;
+}
+
+.graph {
+    width: 60%;
+    height: 75%;
+}
+
+@media only screen and (max-width: 600px) {
+    .graph {
+        width: 100%;
+        height: auto; /* Adjust height as needed */
+    }
+}

@@ -1,0 +1,21 @@
+.pokemon-grid{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    background-color: var(--background);
+}
+.PLPtitle{
+    background-color: var(--background);
+    color: var(--foreground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI';
+    font-size: larger;
+    font-weight: 1000;
+    font-style: italic;
+}
+h3{
+    margin-left: 10px;
+}
