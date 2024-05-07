@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../../Components/Navbar/Navbar';
-import { fetchData, getImageURL } from '../../Utils/pokemonUtils';
+//import { fetchData, getImageURL } from '../../Utils/pokemonUtils';
 import '../PDP/PDP.css'
 import {
   Table,
@@ -15,40 +15,38 @@ import {
 } from "../../Components/ui/table"
 
 import Graph from '@/Components/Graph/Graph';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchData } from '@/features/fetchData/fetchDataSlice';
 
 
 //PDP - Pokemon Details Page -> Displays the details of the selected pokemons
 
+export const getImage = (id) => {
+  const paddedId = `00000${id}`.slice(-3);
+  return `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${paddedId}.png`;
+};
 const PDP = () => {
   //const {darkMode} = useContext(ThemeContext);
   const darkMode = useSelector((state)=>state.theme.darkMode);
   const { id } = useParams();
   const apiURL = `https://pokeapi.co/api/v2/pokemon/${id}/`;
-  const imageURL = getImageURL(id);
+  const imageURL = getImage(id);
+  
   //console.log(apiURL);
-  const [data, setData] = useState();
-
+  
+  const dispatch = useDispatch();
   useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const fetchedData = await fetchData(apiURL);
-        //console.log(fetchedData)
-        setData(fetchedData);
-      } catch (error) {
-        console.log(error);
-      } 
-    };
-    fetchDataAsync();
+    //dispatch(fetchPokemonData(apiURL));
+    dispatch(fetchData({ apiURL: apiURL, page: "PDP" }));
   }, [apiURL]);
 
-  const pokemonData = data;
-  
+  const pokemonData = useSelector((state) => state.fetchData.pokemonData);
+  //console.log(pokemonData)
   return (
     <>
     <Navbar/>
     <div className={`pdp-container ${darkMode ? 'dark' : ''}`}>
-      {pokemonData && (
+      {pokemonData.abilities?.length > 0 ? pokemonData && (
         <div className={`pokemon-details ${darkMode ? 'dark' : ''}`}>
         <center><div className='PDPtitle'>Pokemon Details - {pokemonData.name}</div></center>
         <div className='detail-container'>
@@ -86,7 +84,7 @@ const PDP = () => {
         </div>
           <Graph data={pokemonData} />
         </div>
-      )}
+      ): <div>No Data</div>}
     </div>
 
     
